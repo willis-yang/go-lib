@@ -1,4 +1,4 @@
-package db
+package gormConnect
 
 import (
 	"fmt"
