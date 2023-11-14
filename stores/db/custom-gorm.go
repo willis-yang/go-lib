@@ -29,7 +29,7 @@ const DatabaseTypePostgreSQL = "PostgreSQL"
 const DatabaseTypeTiDB = "TiDB"
 
 // 初始化gorm 连接池
-func newGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
+func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
 
 	var (
 		filePath  string
