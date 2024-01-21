@@ -1,4 +1,4 @@
-module github.com/WillisGitHub/go-lib
+module github.com/willis-yang/go-lib
 
 go 1.19
 
