@@ -1,7 +1,9 @@
 package clickhouse
 
 import (
+	"crypto/tls"
 	"fmt"
+	clickhousego "github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/clickhouse"
 	"gorm.io/gorm"
@@ -13,11 +15,17 @@ import (
 )
 
 type ClickHouseConfig struct {
-	Dsn             string
+	Adders          []string
+	Databases       string
+	Username        string
+	Password        string
+	DialTimeout     int64
 	Tracing         bool
 	MaxIdle         int
 	MaxOpen         int
 	ConnMaxIdleTime int
+	Debug           bool
+	TLS             bool
 }
 
 func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm.DB {
@@ -48,9 +56,28 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 			},
 		)
 	}
-
+	clickhouseConn := clickhousego.OpenDB(&clickhousego.Options{
+		Addr: clickHouseConfig.Adders,
+		Auth: clickhousego.Auth{
+			Database: clickHouseConfig.Databases,
+			Username: clickHouseConfig.Username,
+			Password: clickHouseConfig.Password,
+		},
+		TLS: &tls.Config{
+			InsecureSkipVerify: clickHouseConfig.TLS,
+		},
+		Settings: clickhousego.Settings{
+			"max_execution_time": 60,
+		},
+		Protocol:    clickhousego.HTTP, //now is just supported http connection
+		DialTimeout: 5 * time.Second,
+		Compression: &clickhousego.Compression{
+			Method: clickhousego.CompressionLZ4,
+		},
+		Debug: clickHouseConfig.Debug,
+	})
 	db, err := gorm.Open(clickhouse.New(clickhouse.Config{
-		DSN:                          clickHouseConfig.Dsn,
+		Conn:                         clickhouseConn,
 		DisableDatetimePrecision:     true,
 		DontSupportRenameColumn:      true,
 		DontSupportEmptyDefaultValue: false,
