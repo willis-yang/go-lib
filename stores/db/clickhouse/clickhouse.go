@@ -56,15 +56,12 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 			},
 		)
 	}
-	clickhouseConn := clickhousego.OpenDB(&clickhousego.Options{
+	clickhouseOptions := &clickhousego.Options{
 		Addr: clickHouseConfig.Adders,
 		Auth: clickhousego.Auth{
 			Database: clickHouseConfig.Databases,
 			Username: clickHouseConfig.Username,
 			Password: clickHouseConfig.Password,
-		},
-		TLS: &tls.Config{
-			InsecureSkipVerify: clickHouseConfig.TLS,
 		},
 		Settings: clickhousego.Settings{
 			"max_execution_time": 60,
@@ -75,7 +72,11 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 			Method: clickhousego.CompressionLZ4,
 		},
 		Debug: clickHouseConfig.Debug,
-	})
+	}
+	if clickHouseConfig.TLS {
+		clickhouseOptions.TLS = &tls.Config{InsecureSkipVerify: clickHouseConfig.TLS}
+	}
+	clickhouseConn := clickhousego.OpenDB(clickhouseOptions)
 	db, err := gorm.Open(clickhouse.New(clickhouse.Config{
 		Conn:                         clickhouseConn,
 		DisableDatetimePrecision:     true,
