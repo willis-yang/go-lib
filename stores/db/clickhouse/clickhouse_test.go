@@ -7,10 +7,10 @@ import (
 
 func TestNewClickHouse(t *testing.T) {
 	conf := ClickHouseConfig{
-		Adders:          []string{"192.168.33.10:18123"},
+		Adders:          []string{"192.168.33.10:19000"},
 		Databases:       "cloud_phone_statistic",
 		Username:        "default",
-		Password:        "11@11",
+		Password:        "",
 		DialTimeout:     0,
 		Tracing:         false,
 		MaxIdle:         0,
