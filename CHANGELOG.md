@@ -4,3 +4,7 @@
 2. scheduler task
 ## v1.0.1
 1. clickhouse change support ssl 
+## v1.0.2
+1. clickhouse change support ssl
+## v1.0.3
+1. add mysql connect package
