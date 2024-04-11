@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
@@ -21,6 +22,7 @@ type GormConfig struct {
 }
 
 const DatabaseTypeMysql = "mysql"
+const DatabaseTypeSqlite = "sqlite"
 const DatabaseTypePostgreSQL = "PostgreSQL"
 const DatabaseTypeTiDB = "TiDB"
 
@@ -66,6 +68,8 @@ func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
 			DontSupportRenameColumn:   true,
 			SkipInitializeWithVersion: false,
 		})
+	} else if gormConfig.DatabaseType == DatabaseTypeSqlite {
+		gormDialector = sqlite.Open(gormConfig.DSN)
 	}
 	db, err := gorm.Open(gormDialector, &gorm.Config{
 		Logger: newLogger,
