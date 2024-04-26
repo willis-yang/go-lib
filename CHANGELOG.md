@@ -10,3 +10,7 @@
 1. add mysql connect package
 ## v1.0.4
 1. add sqlite connect support
+## v1.0.5
+1. update dependencies
+## v.1.0.6
+1. add retry func support
