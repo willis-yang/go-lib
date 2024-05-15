@@ -14,3 +14,5 @@
 1. update dependencies
 ## v.1.0.6
 1. add retry func support
+## v.1.0.7
+1. add remote ip support
