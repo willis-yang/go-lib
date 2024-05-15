@@ -10,6 +10,7 @@ require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.23.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/zeromicro/go-zero v1.6.0
+	google.golang.org/grpc v1.59.0
 	gorm.io/driver/clickhouse v0.6.0
 	gorm.io/driver/mysql v1.5.2
 	gorm.io/driver/sqlite v1.5.5
@@ -23,6 +24,7 @@ require (
 	github.com/go-faster/city v1.0.1 // indirect
 	github.com/go-faster/errors v0.7.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -41,5 +43,6 @@ require (
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	go.uber.org/automaxprocs v1.5.3 // indirect
 	golang.org/x/sys v0.18.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
