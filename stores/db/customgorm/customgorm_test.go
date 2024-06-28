@@ -30,7 +30,7 @@ func TestNewGorm(t *testing.T) {
 		Rotation:            "",
 	})
 	var list []string
-	err := gorm.Select("id,name").Where("id = ?", 10).Table("test").Find(&list).Error
+	err := gorm.Select("id").Where("id = ?", 10).Table("users").Find(&list).Error
 	if err != nil {
 		panic(err)
 	}

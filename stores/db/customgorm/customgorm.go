@@ -2,6 +2,7 @@ package customgorm
 
 import (
 	"fmt"
+	"github.com/willis-yang/go-lib/utils"
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
@@ -38,7 +39,7 @@ func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
 			log.New(os.Stdout, "\r\n", log.LstdFlags),
 			logger.Config{
 				SlowThreshold:             time.Second,
-				LogLevel:                  logger.Info,
+				LogLevel:                  utils.GetLogLevel(logConfig.Level),
 				IgnoreRecordNotFoundError: false,
 				Colorful:                  false,
 			},
@@ -50,7 +51,7 @@ func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
 			log.New(file, "\r\n", log.LstdFlags),
 			logger.Config{
 				SlowThreshold:             time.Second,
-				LogLevel:                  logger.Info,
+				LogLevel:                  utils.GetLogLevel(logConfig.Level),
 				IgnoreRecordNotFoundError: false,
 				Colorful:                  false,
 			},

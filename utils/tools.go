@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"google.golang.org/grpc/peer"
+	"gorm.io/gorm/logger"
 	"net"
 )
 
@@ -16,4 +17,17 @@ func GetRemoteIp(ctx context.Context) (string, error) {
 		}
 	}
 	return addr, nil
+}
+
+func GetLogLevel(level string) logger.LogLevel {
+	logLevel := logger.Info
+	switch level {
+	case "error":
+		logLevel = logger.Error
+	case "warn":
+		logLevel = logger.Warn
+	default:
+		logLevel = logger.Info
+	}
+	return logLevel
 }
