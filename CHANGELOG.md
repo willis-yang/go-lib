@@ -16,3 +16,5 @@
 1. add retry func support
 ## v.1.0.7
 1. add remote ip support
+## v.1.0.8
+1. fix db log config level
