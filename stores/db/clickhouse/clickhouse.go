@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	clickhousego "github.com/ClickHouse/clickhouse-go/v2"
+	"github.com/willis-yang/go-lib/utils"
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/clickhouse"
 	"gorm.io/gorm"
@@ -38,7 +39,7 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 			log.New(os.Stdout, "\r\n", log.LstdFlags),
 			logger.Config{
 				SlowThreshold:             time.Second,
-				LogLevel:                  logger.Info,
+				LogLevel:                  utils.GetLogLevel(config.Level),
 				IgnoreRecordNotFoundError: false,
 				Colorful:                  false,
 			},
@@ -50,7 +51,7 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 			log.New(file, "\r\n", log.LstdFlags),
 			logger.Config{
 				SlowThreshold:             time.Second,
-				LogLevel:                  logger.Info,
+				LogLevel:                  utils.GetLogLevel(config.Level),
 				IgnoreRecordNotFoundError: false,
 				Colorful:                  false,
 			},
