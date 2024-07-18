@@ -18,3 +18,5 @@
 1. add remote ip support
 ## v.1.0.8
 1. fix db log config level
+## v.1.0.9
+1. add get metadata info func
