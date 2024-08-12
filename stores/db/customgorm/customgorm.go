@@ -83,7 +83,7 @@ func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
 	sqlDB, err := db.DB()
 	sqlDB.SetMaxIdleConns(gormConfig.MaxIdLe)
 	sqlDB.SetMaxOpenConns(gormConfig.MaxConnect)
-	sqlDB.SetConnMaxLifetime(time.Duration(gormConfig.ConnectMaxLife))
+	sqlDB.SetConnMaxLifetime(time.Duration(int64(gormConfig.ConnectMaxLife)) * time.Second)
 
 	return db
 }

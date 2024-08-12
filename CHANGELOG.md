@@ -20,3 +20,5 @@
 1. fix db log config level
 ## v.1.0.9
 1. add get metadata info func
+## v.1.0.10
+1. change db connect configuration settings 
