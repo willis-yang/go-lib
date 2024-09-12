@@ -27,6 +27,7 @@ type ClickHouseConfig struct {
 	ConnMaxIdleTime int
 	Debug           bool
 	TLS             bool
+	ConnMaxLifeTime int
 }
 
 func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm.DB {
@@ -106,6 +107,7 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 	sqlDB.SetMaxIdleConns(clickHouseConfig.MaxIdle)
 	sqlDB.SetMaxOpenConns(clickHouseConfig.MaxOpen)
 	sqlDB.SetConnMaxIdleTime(time.Duration(int64(clickHouseConfig.ConnMaxIdleTime)) * time.Second)
+	sqlDB.SetConnMaxLifetime(time.Duration(int64(clickHouseConfig.ConnMaxLifeTime)) * time.Second)
 
 	return db
 }

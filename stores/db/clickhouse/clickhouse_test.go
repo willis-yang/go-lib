@@ -7,17 +7,18 @@ import (
 
 func TestNewClickHouse(t *testing.T) {
 	conf := ClickHouseConfig{
-		Adders:          []string{"192.168.33.10:19000"},
-		Databases:       "cloud_phone_statistic",
+		Adders:          []string{"192.168.12.21:18123"},
+		Databases:       "common",
 		Username:        "default",
 		Password:        "",
-		DialTimeout:     0,
+		DialTimeout:     10,
 		Tracing:         false,
-		MaxIdle:         0,
-		MaxOpen:         0,
-		ConnMaxIdleTime: 0,
+		MaxIdle:         1,
+		MaxOpen:         1,
+		ConnMaxIdleTime: 5,
 		Debug:           true,
 		TLS:             false,
+		ConnMaxLifeTime: 10,
 	}
 	clickhouseConn := NewClickHouse(conf, logx.LogConf{
 		ServiceName:         "",
@@ -35,7 +36,7 @@ func TestNewClickHouse(t *testing.T) {
 		MaxSize:             0,
 		Rotation:            "",
 	})
-	err := clickhouseConn.Exec("select count(*) from cloud_phone_statistic.cps_event_tracking").Error
+	err := clickhouseConn.Exec("select count(*) from common.country_list").Error
 	if err != nil {
 		panic(err)
 	}
