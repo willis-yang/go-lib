@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"github.com/zeromicro/go-zero/core/logx"
 	"time"
 )
 
@@ -14,11 +13,9 @@ type RetryOptions struct {
 func RetryFunc(ctx context.Context, fn func() error, opts RetryOptions) error {
 	var err error
 	for i := 0; i < opts.MaxRetries; i++ {
-		logx.WithContext(ctx).Info("exec func %d times ", i)
 		if err = fn(); err == nil {
 			return nil
 		}
-
 		select {
 		case <-ctx.Done():
 			return ctx.Err()

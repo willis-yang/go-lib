@@ -22,3 +22,7 @@
 1. add get metadata info func
 ## v.1.0.10
 1. change db connect configuration settings 
+## v.1.1.0
+1. add ck maxLifetime connect configuration settings
+2. add dingDing robot talk message
+3. remove retry log info
