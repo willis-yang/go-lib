@@ -68,8 +68,9 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 		Settings: clickhousego.Settings{
 			"max_execution_time": 60,
 		},
-		Protocol:    clickhousego.HTTP, //now is just supported http connection
-		DialTimeout: 5 * time.Second,
+		Protocol:         clickhousego.HTTP, //now is just supported http connection
+		DialTimeout:      5 * time.Second,
+		ConnOpenStrategy: clickhousego.ConnOpenInOrder,
 		Compression: &clickhousego.Compression{
 			Method: clickhousego.CompressionLZ4,
 		},
