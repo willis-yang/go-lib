@@ -26,6 +26,8 @@ func GetLogLevel(level string) logger.LogLevel {
 		logLevel = logger.Error
 	case "warn":
 		logLevel = logger.Warn
+	case "silent":
+		logLevel = logger.Silent
 	default:
 		logLevel = logger.Info
 	}

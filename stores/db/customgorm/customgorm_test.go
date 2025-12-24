@@ -3,6 +3,7 @@ package customgorm
 import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"testing"
+	"time"
 )
 
 func TestNewGorm(t *testing.T) {
@@ -13,21 +14,13 @@ func TestNewGorm(t *testing.T) {
 		MaxIdLe:        0,
 		MaxConnect:     0,
 		ConnectMaxLife: 0,
-	}, logx.LogConf{
-		ServiceName:         "",
-		Mode:                "",
-		Encoding:            "",
-		TimeFormat:          "",
-		Path:                "",
-		Level:               "",
-		MaxContentLength:    0,
-		Compress:            false,
-		Stat:                false,
-		KeepDays:            0,
-		StackCooldownMillis: 0,
-		MaxBackups:          0,
-		MaxSize:             0,
-		Rotation:            "",
+	}, GormLogConfig{
+		Path:                      "",
+		Level:                     "error",
+		SlowThreshold:             time.Second,
+		IgnoreRecordNotFoundError: false,
+		ParameterizedQueries:      false,
+		Colorful:                  true,
 	})
 	var list []string
 	err := gorm.Select("id").Where("id = ?", 10).Table("users").Find(&list).Error
