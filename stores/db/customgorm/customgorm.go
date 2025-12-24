@@ -3,7 +3,6 @@ package customgorm
 import (
 	"fmt"
 	"github.com/willis-yang/go-lib/utils"
-	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -22,13 +21,28 @@ type GormConfig struct {
 	ConnectMaxLife int
 }
 
+type GormLogConfig struct {
+	// Path represents the log file path, default is `logs`.
+	Path string `json:",default=logs"`
+	// Level represents the log level, default is `info`.
+	Level string `json:",default=info,options=[debug,info,error,severe]"`
+	// SlowThreshold represents the slow threshold, default is `1s`.
+	SlowThreshold time.Duration `json:",default=1s"`
+	// IgnoreRecordNotFoundError represents whether to ignore record not found error, default is `false`.
+	IgnoreRecordNotFoundError bool `json:",default=false"`
+	// ParameterizedQueries represents whether to use parameterized queries, default is `true`.
+	ParameterizedQueries bool `json:",default=true"`
+	// Colorful represents whether to use colorful log, default is `false`.
+	Colorful bool `json:",default=false"`
+}
+
 const DatabaseTypeMysql = "mysql"
 const DatabaseTypeSqlite = "sqlite"
 const DatabaseTypePostgreSQL = "PostgreSQL"
 const DatabaseTypeTiDB = "TiDB"
 
 // 初始化gorm 连接池
-func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
+func NewGorm(gormConfig GormConfig, logConfig GormLogConfig) *gorm.DB {
 
 	var (
 		filePath  string
@@ -38,10 +52,11 @@ func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
 		newLogger = logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags),
 			logger.Config{
-				SlowThreshold:             time.Second,
+				SlowThreshold:             logConfig.SlowThreshold,
 				LogLevel:                  utils.GetLogLevel(logConfig.Level),
-				IgnoreRecordNotFoundError: false,
-				Colorful:                  false,
+				IgnoreRecordNotFoundError: logConfig.IgnoreRecordNotFoundError,
+				ParameterizedQueries:      logConfig.ParameterizedQueries,
+				Colorful:                  logConfig.Colorful,
 			},
 		)
 	} else {
@@ -50,10 +65,11 @@ func NewGorm(gormConfig GormConfig, logConfig logx.LogConf) *gorm.DB {
 		newLogger = logger.New(
 			log.New(file, "\r\n", log.LstdFlags),
 			logger.Config{
-				SlowThreshold:             time.Second,
+				SlowThreshold:             logConfig.SlowThreshold,
 				LogLevel:                  utils.GetLogLevel(logConfig.Level),
-				IgnoreRecordNotFoundError: false,
-				Colorful:                  false,
+				IgnoreRecordNotFoundError: logConfig.IgnoreRecordNotFoundError,
+				ParameterizedQueries:      logConfig.ParameterizedQueries,
+				Colorful:                  logConfig.Colorful,
 			},
 		)
 	}
