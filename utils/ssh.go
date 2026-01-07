@@ -21,7 +21,7 @@ type SSHManager struct {
 func loadPrivateKey(keyPath, passphrase string) (ssh.AuthMethod, error) {
 	keyData, err := os.ReadFile(keyPath)
 	if err != nil {
-		return nil, fmt.Errorf("读取私钥文件失败: %w", err)
+		return nil, fmt.Errorf("read private key file failed: %w", err)
 	}
 
 	var signer ssh.Signer
@@ -57,7 +57,7 @@ func NewSSHManager(host, port, user, keyPath string, timeout time.Duration) (*SS
 
 	client, err := ssh.Dial("tcp", host+":"+port, config)
 	if err != nil {
-		return nil, fmt.Errorf("连接失败: %w", err)
+		return nil, fmt.Errorf("connect ssh failed: %w", err)
 	}
 
 	return &SSHManager{client: client}, nil
@@ -69,7 +69,7 @@ func (m *SSHManager) ExecuteCommand(cmd string) (string, error) {
 
 	m.session, err = m.client.NewSession()
 	if err != nil {
-		return "", fmt.Errorf("创建会话失败: %w", err)
+		return "", fmt.Errorf("create session failed: %w", err)
 	}
 	defer func() {
 		if m.session != nil {
@@ -79,7 +79,7 @@ func (m *SSHManager) ExecuteCommand(cmd string) (string, error) {
 	}()
 	output, err := m.session.CombinedOutput(cmd)
 	if err != nil {
-		return "", fmt.Errorf("执行失败: %w", err)
+		return "", fmt.Errorf("execute command failed: %w", err)
 	}
 
 	return string(output), nil
@@ -90,29 +90,29 @@ func (m *SSHManager) ExecuteCommandWithStream(cmd string) error {
 	var err error
 	m.session, err = m.client.NewSession()
 	if err != nil {
-		return fmt.Errorf("创建会话失败: %w", err)
+		return fmt.Errorf("create session failed: %w", err)
 	}
 	m.stdout, err = m.session.StdoutPipe()
 	if err != nil {
 		m.Close()
-		return fmt.Errorf("获取 stdout 失败: %w", err)
+		return fmt.Errorf("get stdout failed: %w", err)
 	}
 
 	m.stderr, err = m.session.StderrPipe()
 	if err != nil {
 		m.Close()
-		return fmt.Errorf("获取 stderr 失败: %w", err)
+		return fmt.Errorf("get stderr failed: %w", err)
 	}
 
 	m.stdin, err = m.session.StdinPipe()
 	if err != nil {
 		m.Close()
-		return fmt.Errorf("获取 stdin 失败: %w", err)
+		return fmt.Errorf("get stdin failed: %w", err)
 	}
 
 	if err := m.session.Start(cmd); err != nil {
 		m.Close()
-		return fmt.Errorf("启动命令失败: %w", err)
+		return fmt.Errorf("start command failed: %w", err)
 	}
 
 	return nil
@@ -154,19 +154,3 @@ func (m *SSHManager) Close() error {
 	}
 	return nil
 }
-
-//
-//func safeSSHOperation(host, port, user, keyPath string) error {
-//	manager, err := NewSSHManager(host, port, user, keyPath)
-//	if err != nil {
-//		return err
-//	}
-//	defer manager.Close()
-//	output, err := manager.ExecuteCommand("ls -la")
-//	if err != nil {
-//		return err
-//	}
-//
-//	fmt.Printf("输出: %s\n", output)
-//	return nil
-//}
