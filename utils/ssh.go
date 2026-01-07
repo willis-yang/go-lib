@@ -42,7 +42,7 @@ func loadPrivateKey(keyPath, passphrase string) (ssh.AuthMethod, error) {
 	return ssh.PublicKeys(signer), nil
 }
 
-func NewSSHManager(host, port, user, keyPath string) (*SSHManager, error) {
+func NewSSHManager(host, port, user, keyPath string, timeout time.Duration) (*SSHManager, error) {
 	authMethod, err := loadPrivateKey(keyPath, "")
 	if err != nil {
 		return nil, fmt.Errorf("load private key error: %w", err)
@@ -52,7 +52,7 @@ func NewSSHManager(host, port, user, keyPath string) (*SSHManager, error) {
 		User:            user,
 		Auth:            []ssh.AuthMethod{authMethod},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-		Timeout:         30 * time.Second,
+		Timeout:         timeout,
 	}
 
 	client, err := ssh.Dial("tcp", host+":"+port, config)
