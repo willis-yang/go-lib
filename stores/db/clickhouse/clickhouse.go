@@ -66,7 +66,7 @@ func NewClickHouse(clickHouseConfig ClickHouseConfig, config logx.LogConf) *gorm
 			Password: clickHouseConfig.Password,
 		},
 		Settings: clickhousego.Settings{
-			"max_execution_time": 60,
+			"max_execution_time": 300,
 		},
 		Protocol:         clickhousego.HTTP, //now is just supported http connection
 		DialTimeout:      5 * time.Second,
