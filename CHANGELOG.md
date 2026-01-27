@@ -30,3 +30,5 @@
 1. change db connect log config settings
 ## v1.1.4
 1. add ssh connect tools
+## v1.1.5
+1. add internal scheduler task
