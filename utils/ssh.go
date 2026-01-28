@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"os"
 	"time"
 
 	"golang.org/x/crypto/ssh"
@@ -18,14 +17,9 @@ type SSHManager struct {
 	stdin   io.WriteCloser
 }
 
-func loadPrivateKey(keyPath, passphrase string) (ssh.AuthMethod, error) {
-	keyData, err := os.ReadFile(keyPath)
-	if err != nil {
-		return nil, fmt.Errorf("read private key file failed: %w", err)
-	}
-
+func loadPrivateKey(keyData []byte, passphrase string) (ssh.AuthMethod, error) {
 	var signer ssh.Signer
-
+	var err error
 	if passphrase == "" {
 		signer, err = ssh.ParsePrivateKey(keyData)
 		if err != nil {
@@ -42,8 +36,8 @@ func loadPrivateKey(keyPath, passphrase string) (ssh.AuthMethod, error) {
 	return ssh.PublicKeys(signer), nil
 }
 
-func NewSSHManager(host, port, user, keyPath string, timeout time.Duration) (*SSHManager, error) {
-	authMethod, err := loadPrivateKey(keyPath, "")
+func NewSSHManager(host, port, user string, keyData []byte, timeout time.Duration) (*SSHManager, error) {
+	authMethod, err := loadPrivateKey(keyData, "")
 	if err != nil {
 		return nil, fmt.Errorf("load private key error: %w", err)
 	}
