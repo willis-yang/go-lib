@@ -21,7 +21,7 @@ func TestNewSSHManager(t *testing.T) {
 		{
 			name: "测试连接 SSH",
 			args: args{
-				host:    "192.168.10.5",
+				host:    "192.168.106.0",
 				port:    "22",
 				user:    "root",
 				keyPath: "id_rsa",
@@ -38,7 +38,8 @@ func TestNewSSHManager(t *testing.T) {
 				return
 			}
 			defer connect.Close()
-			output, err := connect.ExecuteCommand("ps -ef |grep ios")
+			//测试超时
+			output, err := connect.ExecuteCommand("sleep 5 && ps -ef |grep ios", time.Second*7)
 			if err != nil {
 				t.Errorf("ExecuteCommand() error = %v", err)
 				return

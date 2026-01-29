@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -58,9 +59,9 @@ func NewSSHManager(host, port, user string, keyData []byte, timeout time.Duratio
 }
 
 // ExecuteCommand
-func (m *SSHManager) ExecuteCommand(cmd string) (string, error) {
+// 设置超时时间
+func (m *SSHManager) ExecuteCommand(cmd string, timeout time.Duration) (string, error) {
 	var err error
-
 	m.session, err = m.client.NewSession()
 	if err != nil {
 		return "", fmt.Errorf("create session failed: %w", err)
@@ -71,12 +72,34 @@ func (m *SSHManager) ExecuteCommand(cmd string) (string, error) {
 			m.session = nil
 		}
 	}()
-	output, err := m.session.CombinedOutput(cmd)
-	if err != nil {
-		return "", fmt.Errorf("execute command failed: %w", err)
-	}
+	// 创建带超时的上下文
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
 
-	return string(output), nil
+	// 定义结果通道
+	type result struct {
+		output []byte
+		err    error
+	}
+	ch := make(chan result, 1)
+
+	go func() {
+		output, err := m.session.CombinedOutput(cmd)
+		ch <- result{output, err}
+	}()
+
+	// 等待命令完成或超时
+	select {
+	case <-ctx.Done():
+		// 超时触发，关闭会话终止命令
+		m.session.Close()
+		return "", fmt.Errorf("command execution timed out after %v", timeout)
+	case res := <-ch:
+		if res.err != nil {
+			return "", fmt.Errorf("execute command failed: %w", res.err)
+		}
+		return string(res.output), nil
+	}
 }
 
 // ExecuteCommandWithStream
